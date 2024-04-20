@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 # Capture video from camera or file
-cap = cv2.VideoCapture('video.mp4')
+cap = cv2.VideoCapture('video/test.MOV')
 
 # Parameters for Lucas-Kanade optical flow
 lk_params = dict(winSize=(15, 15),
@@ -31,7 +31,7 @@ while True:
     
     # Filter valid points and calculate mean movement on x-axis
     new_pts_valid = new_pts[status == 1]
-    new_x = new_pts_valid[:, 0, 0].mean()
+    new_x = new_pts_valid[:, 0].mean()
     
     # Calculate speed on x-axis
     speed_x = abs(new_x - prev_x)
@@ -47,7 +47,8 @@ while True:
     # Display optical flow
     for p in new_pts_valid:
         x, y = p.ravel()
-        cv2.circle(frame, (x, y), 5, color, -1)
+    cv2.circle(frame, (int(x), int(y)), 5, color, -1)
+
     cv2.imshow('Optical Flow', frame)
     
     if cv2.waitKey(30) & 0xFF == ord('q'):
