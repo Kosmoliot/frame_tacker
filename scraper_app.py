@@ -2,10 +2,10 @@ import cv2
 import pytesseract
 
 # Path to Tesseract executable (change accordingly)
-pytesseract.pytesseract.tesseract_cmd = '/usr/local/bin/tesseract'
+pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/Cellar/tesseract/5.3.4_1/bin/tesseract'
 
 # Open the video file or capture video from camera
-cap = cv2.VideoCapture('input_video.mp4')
+cap = cv2.VideoCapture('video/short_sample.mp4')
 
 # Initialize frame counter
 frame_count = 0
@@ -21,10 +21,12 @@ while cap.isOpened():
     # Use Tesseract OCR to recognize numbers
     numbers = pytesseract.image_to_string(gray, config='--psm 6 digits')
     
+    output = {}
     # Display or save the recognized numbers
     if numbers:
-        print(f"Frame {frame_count}: Recognized numbers: {numbers.strip()}")
+        output = {frame_count: {numbers.strip()}}
     
+    print(output)
     # Increment frame counter
     frame_count += 1
     
