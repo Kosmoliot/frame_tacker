@@ -1,6 +1,7 @@
 import cv2
 import pytesseract
 import csv
+import re
 
 # Path to Tesseract executable (change accordingly)
 pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/Cellar/tesseract/5.3.4_1/bin/tesseract'
@@ -36,8 +37,10 @@ with open('number_capture.csv', 'w', newline='') as csvfile:
         
         # Write the frame number and recognized numbers to the CSV file
         if numbers:
-            axis_values = numbers.strip().split(' ')
-            writer.writerow({'Frame': frame_count, '0 axis': axis_values[0], '1 axis': axis_values[1], '2 axis': axis_values[2], '3 axis': axis_values[3]})
+            # Extract numbers using regular expression, handling lack of gaps
+            axis_values = re.findall(r'-?\d+\.\d+', numbers.strip())
+            if len(axis_values) >= 4:
+                writer.writerow({'Frame': frame_count, '0 axis': axis_values[0], '1 axis': axis_values[1], '2 axis': axis_values[2], '3 axis': axis_values[3]})
         
         # Increment frame counter
         frame_count += 1
