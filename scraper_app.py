@@ -6,10 +6,10 @@ import csv
 pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/Cellar/tesseract/5.3.4_1/bin/tesseract'
 
 # Open the video file or capture video from camera
-cap = cv2.VideoCapture('video/short_sample.mp4')
+cap = cv2.VideoCapture('video/full_screen.mp4')
 
 # Define the coordinates of the region of interest (ROI)
-roi_top_left_x, roi_top_left_y, roi_width, roi_height = 350, 150, 1500, 150
+roi_top_left_x, roi_top_left_y, roi_width, roi_height = 425, 750, 750, 150
 
 # Open a CSV file for writing the output
 with open('number_capture.csv', 'w', newline='') as csvfile:
