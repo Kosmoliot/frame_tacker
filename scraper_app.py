@@ -38,6 +38,7 @@ with open('number_capture.csv', 'w', newline='') as csvfile:
         # Write the frame number and recognized numbers to the CSV file
         if numbers:
             # Extract numbers using regular expression, handling lack of gaps
+            # make sure negative numbers are caputred as well
             axis_values = re.findall(r'-?\d+\.\d+', numbers.strip())
             if len(axis_values) >= 4:
                 writer.writerow({'Frame': frame_count, '0 axis': axis_values[0], '1 axis': axis_values[1], '2 axis': axis_values[2], '3 axis': axis_values[3]})
