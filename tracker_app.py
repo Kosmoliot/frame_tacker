@@ -26,6 +26,10 @@ csv_file_path = 'speed_tracker.csv'
 with open(csv_file_path, 'w', newline='') as csv_file:
     csv_writer = csv.writer(csv_file)
 
+    csv_writer.writerow(['Frame', 'Speed along x-axis'])
+
+    frame_count = 1
+
     while True:
         ret, frame = cap.read()
         if not ret:
@@ -48,7 +52,7 @@ with open(csv_file_path, 'w', newline='') as csv_file:
         prev_x = new_x
         
         # Output speed
-        csv_writer.writerow([f'Speed along x-axis:{speed_x}'])
+        csv_writer.writerow([frame_count, speed_x])
         # print("Speed along x-axis:", speed_x)
         
         # Display optical flow
@@ -57,6 +61,8 @@ with open(csv_file_path, 'w', newline='') as csv_file:
         cv2.circle(frame, (int(x), int(y)), 5, color, -1)
 
         cv2.imshow('Optical Flow', frame)
+
+        frame_count += 1
         
         if cv2.waitKey(30) & 0xFF == ord('q'):
             break
