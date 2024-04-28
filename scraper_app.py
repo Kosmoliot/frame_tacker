@@ -7,13 +7,15 @@ import re
 pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/Cellar/tesseract/5.3.4_1/bin/tesseract'
 
 # Open the video file or capture video from camera
-cap = cv2.VideoCapture('video/full_screen.mp4')
+video_path = 'video/full_screen.mp4'
+cap = cv2.VideoCapture(video_path)
 
 # Define the coordinates of the region of interest (ROI)
-roi_top_left_x, roi_top_left_y, roi_width, roi_height = 425, 950, 750, 75
+roi_x, roi_y, roi_width, roi_height = 425, 950, 750, 75
 
 # Open a CSV file for writing the output
-with open('number_capture.csv', 'w', newline='') as csvfile:
+csv_file_path = 'number_capture.csv'
+with open(csv_file_path, 'w', newline='') as csvfile:
     fieldnames = ['Frame', '0 axis', '1 axis', '2 axis', '3 axis']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
@@ -27,7 +29,7 @@ with open('number_capture.csv', 'w', newline='') as csvfile:
             break
 
         # Crop the frame to extract the region of interest (ROI)
-        roi = frame[roi_top_left_y:roi_top_left_y + roi_height, roi_top_left_x:roi_top_left_x + roi_width]
+        roi = frame[roi_y:roi_y + roi_height, roi_x:roi_x + roi_width]
         
         # Preprocess the ROI (convert to grayscale)
         gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
@@ -38,7 +40,6 @@ with open('number_capture.csv', 'w', newline='') as csvfile:
         # Write the frame number and recognized numbers to the CSV file
         if numbers:
             # Extract numbers using regular expression, handling lack of gaps
-            # make sure negative numbers are caputred as well
             axis_values = re.findall(r'-?\d+\.\d+', numbers.strip())
             if len(axis_values) >= 4:
                 writer.writerow({'Frame': frame_count, '0 axis': axis_values[0], '1 axis': axis_values[1], '2 axis': axis_values[2], '3 axis': axis_values[3]})
@@ -47,7 +48,7 @@ with open('number_capture.csv', 'w', newline='') as csvfile:
         frame_count += 1
         
         # Display the frame with ROI
-        cv2.rectangle(frame, (roi_top_left_x, roi_top_left_y), (roi_top_left_x + roi_width, roi_top_left_y + roi_height), (0, 255, 0), 2)
+        cv2.rectangle(frame, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 0), 2)
         cv2.imshow('Video with ROI', frame)
         
         # Press 'q' to exit
